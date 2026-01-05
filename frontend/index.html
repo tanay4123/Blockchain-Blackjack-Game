@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎰 Blackjack Carnival Booth 🎰</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Modak&family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --felt-green: #0a5e3a;
+            --felt-dark: #064029;
+            --gold: #FFD700;
+            --red: #DC143C;
+            --neon-pink: #FF10F0;
+            --neon-cyan: #00F0FF;
+            --card-white: #FFFEF7;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Crimson Text', serif;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 16, 240, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(0, 240, 255, 0.15) 0%, transparent 50%),
+                linear-gradient(135deg, var(--felt-dark) 0%, var(--felt-green) 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 255, 255, 0.03) 2px, rgba(255, 255, 255, 0.03) 4px);
+            pointer-events: none;
+            animation: noise 0.2s infinite;
+        }
+        
+        @keyframes noise {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        h1 {
+            font-family: 'Bungee Shade', cursive;
+            font-size: clamp(2rem, 8vw, 5rem);
+            color: var(--gold);
+            text-align: center;
+            margin-bottom: 10px;
+            text-shadow: 
+                0 0 10px var(--gold),
+                0 0 20px var(--gold),
+                0 0 30px var(--red),
+                0 0 40px var(--red),
+                3px 3px 0 rgba(0,0,0,0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+            letter-spacing: 2px;
+        }
+        
+        @keyframes glow {
+            from {
+                text-shadow: 
+                    0 0 10px var(--gold),
+                    0 0 20px var(--gold),
+                    0 0 30px var(--red),
+                    0 0 40px var(--red),
+                    3px 3px 0 rgba(0,0,0,0.3);
+            }
+            to {
+                text-shadow: 
+                    0 0 20px var(--gold),
+                    0 0 30px var(--gold),
+                    0 0 40px var(--neon-pink),
+                    0 0 50px var(--neon-pink),
+                    3px 3px 0 rgba(0,0,0,0.3);
+            }
+        }
+        
+        .subtitle {
+            font-family: 'Modak', cursive;
+            font-size: clamp(1rem, 4vw, 2rem);
+            color: var(--neon-cyan);
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px var(--neon-cyan);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .game-container {
+            background: linear-gradient(135deg, rgba(10, 94, 58, 0.95) 0%, rgba(6, 64, 41, 0.95) 100%);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 
+                0 0 0 3px var(--gold),
+                0 0 30px rgba(255, 215, 0, 0.5),
+                inset 0 0 60px rgba(0, 0, 0, 0.3);
+            border: 3px solid var(--gold);
+            position: relative;
+            animation: containerFloat 3s ease-in-out infinite;
+        }
+        
+        @keyframes containerFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        .game-container::before {
+            content: '♠ ♥ ♦ ♣';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            color: rgba(255, 215, 0, 0.3);
+            letter-spacing: 15px;
+        }
+        
+        .payment-section {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 2px dashed var(--gold);
+        }
+        
+        .info-box {
+            background: rgba(255, 215, 0, 0.1);
+            border-left: 4px solid var(--gold);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            color: var(--card-white);
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        
+        .info-box strong {
+            color: var(--gold);
+            font-weight: 700;
+        }
+        
+        .memo-display {
+            font-family: 'Courier New', monospace;
+            font-size: 22px;
+            color: var(--neon-cyan);
+            background: rgba(0, 0, 0, 0.5);
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 15px 0;
+            border: 1px solid var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+            letter-spacing: 3px;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border: 2px solid var(--gold);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.5);
+            color: var(--card-white);
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            transition: all 0.3s;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            border-color: var(--neon-cyan);
+        }
+        
+        button {
+            background: linear-gradient(135deg, var(--red) 0%, #8B0000 100%);
+            color: white;
+            border: 3px solid var(--gold);
+            padding: 15px 35px;
+            font-size: 20px;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Crimson Text', serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 
+                0 5px 15px rgba(0, 0, 0, 0.3),
+                0 0 20px rgba(255, 215, 0, 0.3);
+            margin: 8px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 
+                0 8px 20px rgba(0, 0, 0, 0.4),
+                0 0 30px rgba(255, 215, 0, 0.6);
+        }
+        
+        button:active {
+            transform: translateY(0px);
+        }
+        
+        button:disabled {
+            background: linear-gradient(135deg, #666 0%, #444 100%);
+            cursor: not-allowed;
+            opacity: 0.5;
+            transform: none;
+        }
+        
+        .game-area {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .card-area {
+            margin: 25px 0;
+            min-height: 150px;
+        }
+        
+        .card-area h3 {
+            color: var(--gold);
+            font-size: 24px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        
+        .cards {
+            display: flex;
+            gap: -30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 15px 0;
+        }
+        
+        .card {
+            width: 100px;
+            height: 140px;
+            background: var(--card-white);
+            border-radius: 10px;
+            border: 3px solid #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: 700;
+            box-shadow: 
+                0 5px 15px rgba(0, 0, 0, 0.4),
+                inset 0 0 20px rgba(255, 255, 255, 0.3);
+            position: relative;
+            animation: dealCard 0.3s ease-out;
+            margin: 5px;
+        }
+        
+        @keyframes dealCard {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) rotateY(180deg);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) rotateY(0);
+            }
+        }
+        
+        .card.red {
+            color: var(--red);
+        }
+        
+        .card.black {
+            color: #000;
+        }
+        
+        .card .rank {
+            font-size: 24px;
+            position: absolute;
+            top: 8px;
+            left: 8px;
+        }
+        
+        .card .suit {
+            font-size: 56px;
+        }
+        
+        .card-back {
+            width: 100px;
+            height: 140px;
+            background: linear-gradient(135deg, var(--red) 0%, #8B0000 100%);
+            border-radius: 10px;
+            border: 3px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            animation: dealCard 0.3s ease-out;
+            margin: 5px;
+        }
+        
+        .card-back::before {
+            content: '★';
+            color: var(--gold);
+            animation: spin 3s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .value-display {
+            font-size: 28px;
+            color: var(--neon-cyan);
+            font-weight: 700;
+            margin-top: 10px;
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 25px 0;
+        }
+        
+        .message {
+            background: rgba(220, 20, 60, 0.2);
+            border: 2px solid var(--red);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--gold);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            animation: messageSlide 0.5s ease-out;
+        }
+        
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .result-win {
+            background: rgba(0, 255, 0, 0.2);
+            border-color: #00FF00;
+            color: #00FF00;
+            text-shadow: 0 0 20px #00FF00;
+        }
+        
+        .result-lose {
+            background: rgba(220, 20, 60, 0.3);
+            border-color: var(--red);
+            color: var(--red);
+            text-shadow: 0 0 20px var(--red);
+        }
+        
+        .result-push {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: var(--gold);
+            color: var(--gold);
+            text-shadow: 0 0 20px var(--gold);
+        }
+        
+        #errorMessage {
+            color: var(--red);
+            background: rgba(220, 20, 60, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid var(--red);
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎰 BLACKJACK 🎰</h1>
+    <div class="subtitle">~ Carnival Booth Edition ~</div>
+    
+    <div class="game-container">
+        <div id="paymentSection" class="payment-section">
+            <div class="info-box">
+                <strong>🎪 Welcome to the Blackjack Booth!</strong><br>
+                To play, send 1-5 tickets to start. Win and get double your bet! Push and get your bet back!
+            </div>
+            
+            <div class="info-box">
+                <strong>Booth Account:</strong> <span id="boothName">BOOTH_PLACEHOLDER</span><br>
+                <strong>Your Game Memo:</strong>
+                <div class="memo-display" id="memoDisplay">MEMO_PLACEHOLDER</div>
+            </div>
+            
+            <div class="info-box">
+                <strong>📋 How to Play:</strong><br>
+                1. Open your blockchain agent (bc_agent.py)<br>
+                2. Send 1-5 tickets to <strong id="boothName2">BOOTH_PLACEHOLDER</strong> with memo above<br>
+                3. Copy the block hash from the transaction<br>
+                4. Paste it below and click "Verify Payment"
+            </div>
+            
+            <input type="text" id="blockHashInput" placeholder="Paste block hash here...">
+            <div style="text-align: center;">
+                <button onclick="verifyPayment()">🎲 Verify Payment & Start Game</button>
+            </div>
+            <div id="errorMessage"></div>
+        </div>
+        
+        <div id="gameArea" class="game-area">
+            <div class="card-area">
+                <h3>🎩 Dealer's Hand</h3>
+                <div id="dealerCards" class="cards"></div>
+                <div id="dealerValue" class="value-display"></div>
+            </div>
+            
+            <div class="card-area">
+                <h3>🎴 Your Hand</h3>
+                <div id="playerCards" class="cards"></div>
+                <div id="playerValue" class="value-display"></div>
+            </div>
+            
+            <div class="controls">
+                <button id="hitBtn" onclick="hit()">🃏 HIT</button>
+                <button id="standBtn" onclick="stand()">✋ STAND</button>
+            </div>
+            
+            <div id="gameMessage" class="message" style="display: none;"></div>
+        </div>
+    </div>
+    
+    <script>
+        const memo = 'MEMO_PLACEHOLDER';
+        
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+        
+        async function verifyPayment() {
+            const blockHash = document.getElementById('blockHashInput').value.trim();
+            
+            if (!blockHash) {
+                showError('Please enter a block hash!');
+                return;
+            }
+            
+            // Show loading state
+            const button = event.target;
+            const originalText = button.textContent;
+            button.disabled = true;
+            button.textContent = '⏳ Verifying...';
+            
+            try {
+                const response = await fetch('/verify_payment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        block_hash: blockHash,
+                        memo: memo
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    showError(data.error);
+                    button.disabled = false;
+                    button.textContent = originalText;
+                    return;
+                }
+                
+                // Payment verified! Show game area
+                document.getElementById('paymentSection').style.display = 'none';
+                document.getElementById('gameArea').style.display = 'block';
+                
+                // Display initial game state
+                displayHand('player', data.player_hand, data.player_value);
+                displayHand('dealer', data.dealer_hand, null);
+                
+                showMessage(data.message);
+                
+            } catch (error) {
+                showError('Failed to verify payment: ' + error.message);
+                button.disabled = false;
+                button.textContent = originalText;
+            }
+        }
+        
+        function displayHand(player, cards, value) {
+            const cardsDiv = document.getElementById(player + 'Cards');
+            const valueDiv = document.getElementById(player + 'Value');
+            
+            cardsDiv.innerHTML = '';
+            
+            cards.forEach(card => {
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'card ' + (card.suit === '♥' || card.suit === '♦' ? 'red' : 'black');
+                cardDiv.innerHTML = `
+                    <span class="rank">${card.rank}</span>
+                    <span class="suit">${card.suit}</span>
+                `;
+                cardsDiv.appendChild(cardDiv);
+            });
+            
+            // Show dealer's hidden card
+            if (player === 'dealer' && value === null) {
+                const backDiv = document.createElement('div');
+                backDiv.className = 'card-back';
+                cardsDiv.appendChild(backDiv);
+                valueDiv.textContent = '';
+            } else if (value !== null) {
+                valueDiv.textContent = `Total: ${value}`;
+            }
+        }
+        
+        async function hit() {
+            try {
+                const response = await fetch('/hit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ memo: memo })
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    showError(data.error);
+                    return;
+                }
+                
+                displayHand('player', data.player_hand, data.player_value);
+                
+                if (data.game_over) {
+                    displayHand('dealer', data.dealer_hand, data.dealer_value);
+                    showMessage(data.message, 'lose');
+                    disableButtons();
+                } else {
+                    showMessage(data.message);
+                }
+                
+            } catch (error) {
+                showError('Failed to hit: ' + error.message);
+            }
+        }
+        
+        async function stand() {
+            try {
+                const response = await fetch('/stand', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ memo: memo })
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    showError(data.error);
+                    return;
+                }
+                
+                displayHand('player', data.player_hand, data.player_value);
+                displayHand('dealer', data.dealer_hand, data.dealer_value);
+                
+                let messageClass = '';
+                if (data.result === 'win') {
+                    messageClass = 'win';
+                    data.message += ` You won ${data.tickets_won} tickets!`;
+                } else if (data.result === 'lose') {
+                    messageClass = 'lose';
+                } else if (data.result === 'push') {
+                    messageClass = 'push';
+                    data.message += ` You got ${data.tickets_won} tickets back.`;
+                }
+                
+                showMessage(data.message, messageClass);
+                disableButtons();
+                
+            } catch (error) {
+                showError('Failed to stand: ' + error.message);
+            }
+        }
+        
+        function showMessage(text, type = '') {
+            const messageDiv = document.getElementById('gameMessage');
+            messageDiv.textContent = text;
+            messageDiv.className = 'message';
+            if (type) {
+                messageDiv.classList.add('result-' + type);
+            }
+            messageDiv.style.display = 'block';
+        }
+        
+        function disableButtons() {
+            document.getElementById('hitBtn').disabled = true;
+            document.getElementById('standBtn').disabled = true;
+        }
+    </script>
+</body>
+</html>
