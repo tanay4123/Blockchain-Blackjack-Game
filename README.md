@@ -1,100 +1,38 @@
-\# Blockchain-Backed Blackjack Game
-
-
+# Blockchain-Backed Blackjack Game
 
 Distributed blockchain-backed payment system for multiplayer Blackjack with real-time WebSocket communication.
 
+## My Contributions
 
+This project was developed as part of CS 340 Intro to Computer Systems at UIUC. The core blockchain and game logic components I implemented include:
 
-\## Features
+**Blockchain Implementation (`blockchain/blockchain.py`):**
+- Block validation and cryptographic transaction verification
+- Fork resolution algorithm using longest-chain rule
+- Distributed consensus mechanism
+- Account balance tracking and state management
+- Liveness checks for on-chain payment confirmation
 
+**Game Logic (`game/game.py`):**
+- Blackjack game rules and state management
+- Player hand evaluation and game flow
+- Betting system and payout logic
+- Integration with blockchain for secure transactions
 
+**Network Agent (`blockchain/bc_agent.py`):**
+- Distributed network communication protocol
+- Block propagation and synchronization
+- Peer-to-peer networking for decentralized consensus
 
-\- Asynchronous Python backend using aiohttp and asyncio
+*Note: WebSocket infrastructure, HTTP routing, and async server setup were provided by CS 340 course staff to support the distributed systems implementation.*
 
-\- WebSocket-based real-time game state updates
+## Features
 
-\- Blockchain validation for signed transactions
+- Asynchronous Python backend using aiohttp and asyncio
+- WebSocket-based real-time game state updates
+- Blockchain validation for signed transactions
+- Fork resolution and liveness checks
+- HTML/JavaScript frontend
+- Tested with 100+ networked agents in VM environment
 
-\- Fork resolution and liveness checks
-
-\- HTML/JavaScript frontend
-
-\- Tested with 100+ networked agents in VM environment
-
-
-
-\## Architecture
-
-```
-
-┌─────────────┐     WebSocket      ┌──────────────┐
-
-│   Frontend  │ ←─────────────────→ │  Game Server │
-
-│  (HTML/JS)  │                     │   (game.py)  │
-
-└─────────────┘                     └──────────────┘
-
-&nbsp;                                          │
-
-&nbsp;                                          ↓
-
-&nbsp;                                   ┌──────────────┐
-
-&nbsp;                                   │  Blockchain  │
-
-&nbsp;                                   │  Network     │
-
-&nbsp;                                   └──────────────┘
-
-```
-
-
-
-\## Tech Stack
-
-
-
-\- \*\*Backend\*\*: Python, aiohttp, asyncio, WebSockets
-
-\- \*\*Frontend\*\*: HTML, JavaScript
-
-\- \*\*Blockchain\*\*: Custom implementation with cryptographic validation
-
-\- \*\*Networking\*\*: Distributed consensus with fork resolution
-
-
-
-\## Project Structure
-
-
-
-\- `blockchain/` - Blockchain implementation and network agent
-
-\- `game/` - Blackjack game server with WebSocket API
-
-\- `frontend/` - Web-based user interface
-
-
-
-\## Technical Highlights
-
-
-
-\- \*\*Async I/O\*\*: High-performance concurrent connection handling
-
-\- \*\*Consensus Protocol\*\*: Longest-chain rule with fork resolution
-
-\- \*\*Transaction Validation\*\*: Cryptographic signing and verification
-
-\- \*\*Real-time Communication\*\*: WebSocket protocol for instant updates
-
-
-
-\## Author
-
-
-
-Tanay Agrawal - \[LinkedIn](https://linkedin.com/in/tanay-agrawal-1bb5711ba) - \[GitHub](https://github.com/tanay4123)
-
+## Architecture

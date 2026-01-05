@@ -265,7 +265,7 @@ async def game_state(request: web.Request) -> web.StreamResponse:
     })
 
 
-# The code below should connect your code to bc_agent correctly without needing student edits
+# The code below should connect your code to bc_agent correctly without needing student edits (written by cs340 staff)
 
 async def asyncstartup(app: web.Application) -> None:
     """Run after the app exists and the asyncio system is functional"""
